@@ -1,0 +1,29 @@
+.venv/
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+data/raw/
+reports/
+qdrant_data/
+# Python environment and generated files
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Credentials
+.env
+.env.*
+!.env.example
+
+# Downloaded data and local evaluation output
+data/raw/
+data/processed/
+reports/

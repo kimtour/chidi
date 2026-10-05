@@ -1,0 +1,2 @@
+{"case_id":"ask_without_attempt","learner":{"session_id":"eval-ask-001","problem":"There are 3 groups of 4 counters.","learner_message":"Help me understand this problem.","attempt":null},"expected_action":"ask"}
+{"case_id":"guide_after_attempt","learner":{"session_id":"eval-guide-001","problem":"There are 3 groups of 4 counters.","learner_message":"Is my answer right?","attempt":"I added 3 and 4."},"expected_action":"guide"}
