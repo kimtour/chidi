@@ -27,3 +27,6 @@ __pycache__/
 data/raw/
 data/processed/
 reports/
+
+# macOS metadata
+.DS_Store
