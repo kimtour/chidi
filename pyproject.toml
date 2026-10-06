@@ -13,6 +13,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+retrieval = ["qdrant-client==1.19.1", "fastembed==0.8.1"]
 analysis = ["pandas==3.0.6"]
 live = [
     "anthropic==1.11.0",

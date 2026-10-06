@@ -14,14 +14,34 @@ class ChidiState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
     reply: NotRequired[dict]
     live: NotRequired[bool]
+    concepts: NotRequired[list[dict]]
+
+
+def retrieve_concepts(state: ChidiState) -> dict:
+    if not state.get("live", False):
+        return {"concepts": []}
+
+    from chidi.retrieval import ConceptStore
+
+    learner = LearnerInput.model_validate(state["learner"])
+    query = (
+        f"Problem: {learner.problem}\n"
+        f"Attempt: {learner.attempt or ''}\n"
+        f"Help request: {learner.learner_message}"
+    )
+
+    store = ConceptStore()
+    try:
+        concepts = store.retrieve(query, limit=1)
+    finally:
+        store.close()
+
+    return {"concepts": concepts}
 
 
 def choose_route(state: ChidiState) -> Literal["ask", "guide"]:
     learner = LearnerInput.model_validate(state["learner"])
-
-    if learner.attempt is None:
-        return "ask"
-    return "guide"
+    return "ask" if learner.attempt is None else "guide"
 
 
 def make_reply(state: ChidiState) -> dict:
@@ -30,7 +50,11 @@ def make_reply(state: ChidiState) -> dict:
     if state.get("live", False):
         from chidi.live_tutor import generate_live_reply
 
-        reply = generate_live_reply(learner, state["messages"])
+        reply = generate_live_reply(
+            learner,
+            state["messages"],
+            concepts=state.get("concepts", []),
+        )
     else:
         reply = generate_reply(learner)
 
@@ -43,15 +67,16 @@ def make_reply(state: ChidiState) -> dict:
 def build_graph():
     builder = StateGraph(ChidiState)
 
+    builder.add_node("retrieve", retrieve_concepts)
     builder.add_node("ask", make_reply)
     builder.add_node("guide", make_reply)
 
+    builder.add_edge(START, "retrieve")
     builder.add_conditional_edges(
-        START,
+        "retrieve",
         choose_route,
         {"ask": "ask", "guide": "guide"},
     )
-
     builder.add_edge("ask", END)
     builder.add_edge("guide", END)
 

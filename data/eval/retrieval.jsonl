@@ -1,0 +1,4 @@
+{"case_id":"tripling","query":"The learner adds extra water after tripling the amount.","expected_concept":"multiplicative_change"}
+{"case_id":"route","query":"The learner counts an extra distance segment between three stores on a commute.","expected_concept":"route_segments"}
+{"case_id":"round_trips","query":"The learner forgot the afternoon walk to school and back home.","expected_concept":"repeated_round_trips"}
+{"case_id":"pies","query":"How should a learner convert slices sold into whole pies using slices per pie?","expected_concept":"units_and_equal_groups"}
