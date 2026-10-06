@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from anthropic import Anthropic
+from langsmith import traceable
 from dotenv import dotenv_values
 
 from chidi.models import LearnerInput, TutorReply
@@ -41,7 +42,12 @@ def generate_live_reply(learner: LearnerInput, history: list) -> TutorReply:
         max_retries=0,
     )
 
-    result = client.messages.create(
+    traced_create = traceable(
+        name="Chidi model request",
+        run_type="llm",
+    )(client.messages.create)
+
+    result = traced_create(
         model=model,
         max_tokens=1024,
         system=policy,
