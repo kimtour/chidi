@@ -33,3 +33,9 @@ jobs:
 
       - name: Run mock evaluations
         run: python scripts/run_eval.py
+
+      - name: Check mock tutor behaviour
+        run: python scripts/run_behavior_eval.py
+
+      - name: Verify controlled regression detection
+        run: python scripts/demo_regression.py
