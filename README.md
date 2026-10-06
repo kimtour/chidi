@@ -13,6 +13,7 @@ It does not reproduce ALX's internal implementation.
 - Mock tutoring for free, repeatable checks.
 - Live tutoring through OpenRouter.
 - LangSmith tracing through the dedicated trace demo.
+- Tutor-turn tracing and answer-disclosure scoring in Langfuse.
 - Local Qdrant retrieval with FastEmbed embeddings.
 - JSONL datasets and per-case evaluation reports.
 - Rule-based answer-disclosure checks.
@@ -27,7 +28,7 @@ Use Python 3.12.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e ".[dev,live,analysis,retrieval,evaluation]" -c requirements.lock.txt
+python -m pip install -e ".[dev,live,analysis,retrieval,evaluation,observability]" -c requirements.lock.txt
 python -m pip check
 ```
 
@@ -42,6 +43,8 @@ Configure these values for live features:
 - `LANGSMITH_API_KEY`: LangSmith API key.
 - `LANGSMITH_PROJECT`: `chidi`.
 - `LANGSMITH_ENDPOINT`: endpoint matching the LangSmith account region.
+- `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_BASE_URL`:
+  Langfuse project credentials and data-region URL.
 
 Model availability depends on the endpoint.
 Secrets belong in `.env`, which is excluded from Git.
@@ -77,6 +80,18 @@ python scripts/trace_demo.py
 Live model requests incur charges.
 Conversation memory lasts for the current Python process.
 The trace demo explicitly enables LangSmith tracing.
+
+## Langfuse demo
+
+Configure `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and
+`LANGFUSE_BASE_URL` in the local `.env`.
+
+```bash
+python scripts/langfuse_demo.py
+```
+
+The demo records a tutor turn and an `answer_disclosure_flag` score.
+Confirm delivery in the Langfuse dashboard.
 
 ## Evaluation
 
@@ -128,6 +143,6 @@ They do not establish general tutor effectiveness or learner mastery.
 
 - Broader independently reviewed evaluation data and untouched test cases.
 - Unknown-failure discovery through fresh interaction review.
-- Langfuse integration.
+- Separate retrieval and generation spans in Langfuse.
 - Paid evaluation workflow with explicit budget controls.
 - Optional FastAPI service and deployment.
