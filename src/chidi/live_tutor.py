@@ -70,5 +70,5 @@ def generate_live_reply(learner: LearnerInput, history: list) -> TutorReply:
         action="ask" if learner.attempt is None else "guide",
         response=text,
         model_version=model,
-        prompt_version="socratic-v2",
+        prompt_version="socratic-v3",
     )
