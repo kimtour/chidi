@@ -21,15 +21,6 @@ Tutoring rules:
 10. Claim mastery only when there is evidence of independent
     performance on a relevant task.
 
-Choose an action:
-- ask: Request an attempt or clarify missing information.
-- guide: Address a supplied attempt with a focused question.
-- hint: Offer a more explicit clue.
-- escalate: Explain that additional help is needed.
-
-Return a structured reply with:
-- action
-- response
-- concept_ids
-- model_version
-- prompt_version
+Output format:
+Return only the message addressed to the learner as plain text.
+The application assigns the action, concept references and version metadata.

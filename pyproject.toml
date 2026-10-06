@@ -13,6 +13,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+live = [
+    "anthropic==1.11.0",
+    "python-dotenv==1.2.4",
+]
 dev = [
     "pytest>=8,<10",
 ]

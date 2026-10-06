@@ -13,6 +13,7 @@ class ChidiState(TypedDict):
     learner: dict
     messages: Annotated[list[AnyMessage], add_messages]
     reply: NotRequired[dict]
+    live: NotRequired[bool]
 
 
 def choose_route(state: ChidiState) -> Literal["ask", "guide"]:
@@ -25,7 +26,13 @@ def choose_route(state: ChidiState) -> Literal["ask", "guide"]:
 
 def make_reply(state: ChidiState) -> dict:
     learner = LearnerInput.model_validate(state["learner"])
-    reply = generate_reply(learner)
+
+    if state.get("live", False):
+        from chidi.live_tutor import generate_live_reply
+
+        reply = generate_live_reply(learner, state["messages"])
+    else:
+        reply = generate_reply(learner)
 
     return {
         "reply": reply.model_dump(),
@@ -54,13 +61,16 @@ def build_graph():
 chidi_graph = build_graph()
 
 
-def run_tutor_graph(learner: LearnerInput) -> TutorReply:
+def run_tutor_graph(
+    learner: LearnerInput, *, live: bool = False
+) -> TutorReply:
     result = chidi_graph.invoke(
         {
             "learner": learner.model_dump(),
             "messages": [
                 HumanMessage(content=learner.model_dump_json())
             ],
+            "live": live,
         },
         {"configurable": {"thread_id": learner.session_id}},
     )
