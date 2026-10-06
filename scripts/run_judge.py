@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 import json
 from datetime import datetime, timezone
@@ -28,12 +29,21 @@ def read_jsonl(path):
 
 
 def main():
-    report_path = ROOT / (
-        "reports/mathdial-20261006T082851Z-66595716.jsonl"
+    parser = argparse.ArgumentParser(
+        description="Judge saved responses and compare review labels."
     )
-    labels_path = ROOT / (
-        "reports/mathdial-20261006T082851Z-66595716-human-review.jsonl"
+    parser.add_argument(
+        "--responses",
+        default="reports/mathdial-20261006T082851Z-66595716.jsonl",
     )
+    parser.add_argument(
+        "--labels",
+        default="reports/mathdial-20261006T082851Z-66595716-human-review.jsonl",
+    )
+    args = parser.parse_args()
+
+    report_path = ROOT / args.responses
+    labels_path = ROOT / args.labels
 
     records = read_jsonl(report_path)
     labels = read_jsonl(labels_path)
@@ -125,7 +135,7 @@ def main():
                 "source_run_id": record["run_id"],
                 "response_sha256": label["response_sha256"],
                 "judge_model_requested": model,
-                "rubric_version": "pedagogy-v2",
+                "rubric_version": "pedagogy-v3",
                 "rubric_sha256": hashlib.sha256(
                     rubric.encode("utf-8")
                 ).hexdigest(),

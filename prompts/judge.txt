@@ -59,3 +59,19 @@ Calibration clarifications:
 3. Evaluate accuracy under the assumptions recorded in the reviewed
    case. An explicitly stated assumption can support conditional
    accuracy, while unresolved ambiguity can still require review.
+
+Accuracy separation:
+Evaluate the mathematical claims actually made.
+Missing guidance or an unrelated question alone does not make a
+mathematically correct statement inaccurate; assess those issues
+under misconception_handling.
+For example, saying "3 + 4 = 7 is arithmetically correct" is accurate
+when explicitly limited to arithmetic. Saying "adding 3 and 4 correctly
+solves three groups of four" is inaccurate.
+Flag uncertain contextual implications for human review.
+
+Question-count separation:
+single_focused_question measures question and task load only.
+A single unrelated question can pass this criterion while failing
+misconception_handling.
+A response with no learner task can also pass this criterion.
