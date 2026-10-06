@@ -14,7 +14,7 @@ def invoke_turn(graph, session_id, attempt=None):
 
     return graph.invoke(
         {
-            "learner": learner,
+            "learner": learner.model_dump(),
             "messages": [
                 HumanMessage(content=learner.model_dump_json())
             ],
@@ -29,8 +29,8 @@ def test_two_turns_preserve_history():
     first = invoke_turn(graph, "same-session")
     second = invoke_turn(graph, "same-session", "I added 3 and 4.")
 
-    assert first["reply"].action == "ask"
-    assert second["reply"].action == "guide"
+    assert first["reply"]["action"] == "ask"
+    assert second["reply"]["action"] == "guide"
     assert len(second["messages"]) == 4
     assert [message.type for message in second["messages"]] == [
         "human", "ai", "human", "ai"
@@ -44,5 +44,5 @@ def test_sessions_have_separate_history():
     result = invoke_turn(graph, "session-b")
 
     assert len(result["messages"]) == 2
-    assert result["learner"].session_id == "session-b"
-    assert result["reply"].action == "ask"
+    assert result["learner"]["session_id"] == "session-b"
+    assert result["reply"]["action"] == "ask"

@@ -10,22 +10,25 @@ from chidi.tutor import generate_reply
 
 
 class ChidiState(TypedDict):
-    learner: LearnerInput
+    learner: dict
     messages: Annotated[list[AnyMessage], add_messages]
-    reply: NotRequired[TutorReply]
+    reply: NotRequired[dict]
 
 
 def choose_route(state: ChidiState) -> Literal["ask", "guide"]:
-    if state["learner"].attempt is None:
+    learner = LearnerInput.model_validate(state["learner"])
+
+    if learner.attempt is None:
         return "ask"
     return "guide"
 
 
 def make_reply(state: ChidiState) -> dict:
-    reply = generate_reply(state["learner"])
+    learner = LearnerInput.model_validate(state["learner"])
+    reply = generate_reply(learner)
 
     return {
-        "reply": reply,
+        "reply": reply.model_dump(),
         "messages": [AIMessage(content=reply.response)],
     }
 
@@ -54,7 +57,7 @@ chidi_graph = build_graph()
 def run_tutor_graph(learner: LearnerInput) -> TutorReply:
     result = chidi_graph.invoke(
         {
-            "learner": learner,
+            "learner": learner.model_dump(),
             "messages": [
                 HumanMessage(content=learner.model_dump_json())
             ],
@@ -62,4 +65,4 @@ def run_tutor_graph(learner: LearnerInput) -> TutorReply:
         {"configurable": {"thread_id": learner.session_id}},
     )
 
-    return result["reply"]
+    return TutorReply.model_validate(result["reply"])
