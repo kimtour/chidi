@@ -125,7 +125,7 @@ def main():
                 "source_run_id": record["run_id"],
                 "response_sha256": label["response_sha256"],
                 "judge_model_requested": model,
-                "rubric_version": "pedagogy-v1",
+                "rubric_version": "pedagogy-v2",
                 "rubric_sha256": hashlib.sha256(
                     rubric.encode("utf-8")
                 ).hexdigest(),

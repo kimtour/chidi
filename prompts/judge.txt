@@ -46,3 +46,16 @@ Return one JSON object with exactly this structure:
 
 Choose each Boolean independently. The example values are placeholders.
 Return JSON only, without Markdown fences or additional text.
+
+Calibration clarifications:
+1. The single_focused_question criterion is a strict interaction policy.
+   Two separately answerable questions fail even when they are closely
+   related or form a useful sequence. This failure does not automatically
+   imply inaccurate guidance or poor misconception handling.
+2. Mentioning a number already in the learner attempt does not alone
+   establish premature disclosure. Assess whether the tutor presents
+   it as the final answer or supplies a complete solution path.
+   Flag genuinely borderline cases for human review.
+3. Evaluate accuracy under the assumptions recorded in the reviewed
+   case. An explicitly stated assumption can support conditional
+   accuracy, while unresolved ambiguity can still require review.
