@@ -21,9 +21,15 @@ def retrieve_concepts(state: ChidiState) -> dict:
     if not state.get("live", False):
         return {"concepts": []}
 
+    learner = LearnerInput.model_validate(state["learner"])
+
+    from chidi.scope import is_course_information_request
+
+    if is_course_information_request(learner.problem):
+        return {"concepts": []}
+
     from chidi.retrieval import ConceptStore
 
-    learner = LearnerInput.model_validate(state["learner"])
     query = (
         f"Problem: {learner.problem}\n"
         f"Attempt: {learner.attempt or ''}\n"
