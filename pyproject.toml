@@ -13,6 +13,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+evaluation = ["ragas==0.4.3", "langchain-community==0.3.31", "openai==1.109.1"]
 retrieval = ["qdrant-client==1.19.1", "fastembed==0.8.1"]
 analysis = ["pandas==3.0.6"]
 live = [
